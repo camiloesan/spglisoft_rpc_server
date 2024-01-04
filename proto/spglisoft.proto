@@ -1,0 +1,33 @@
+syntax = "proto3";
+package spglisoft;
+
+service DataManager {
+    rpc GetDeveloper (DeveloperRequest) returns (DeveloperCredentials);
+    rpc GetProjectManager (ProjectManagerRequest) returns (ProjectManagerCredentials);
+}
+
+message DeveloperRequest {
+    string matricula = 1;
+    string contrasena = 2;
+}
+message DeveloperCredentials {
+    int32 id_desarrollador = 1;
+    string nombre = 2;
+    string apellido_paterno = 3;
+    string apellido_materno = 4;
+    string matricula = 5;
+    optional int32 id_proyecto = 6;
+    int32 semestre = 7;
+    int32 id_experiencia_educativa = 8;
+}
+
+message ProjectManagerRequest {
+    string numero_personal = 1;
+    string contrasena = 2;
+}
+message ProjectManagerCredentials {
+    int32 id_representante = 1;
+    string nombre = 2;
+    string apellido_paterno = 3;
+    string apellido_materno = 4;
+}
