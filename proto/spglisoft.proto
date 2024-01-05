@@ -4,6 +4,11 @@ package spglisoft;
 service DataManager {
     rpc GetDeveloper (DeveloperRequest) returns (DeveloperCredentials);
     rpc GetProjectManager (ProjectManagerRequest) returns (ProjectManagerCredentials);
+    rpc GetDevsByProjectId (DevsByProjectIdRequest) returns (DevsByProjectIdList);
+    rpc GetDevsWithoutProject (NoParams) returns (DevsByProjectIdList);
+    rpc DeleteDevFromProject (DeleteDevRequest) returns (RowsAffected);
+    rpc AddDevToProject (DevProjIdRequest) returns (RowsAffected);
+    rpc AssignActivity (ActDevIdRequest) returns (RowsAffected);
 }
 
 message DeveloperRequest {
@@ -30,4 +35,41 @@ message ProjectManagerCredentials {
     string nombre = 2;
     string apellido_paterno = 3;
     string apellido_materno = 4;
+}
+
+message DevsByProjectIdRequest {
+    int32 id_proyecto = 1;
+}
+message DevsByProjectIdList {
+    message DevInfo {
+        int32 id_desarrollador = 1;
+        string nombre = 2;
+        string apellido_paterno = 3;
+        string apellido_materno = 4;
+        string matricula = 5;
+        int32 semestre = 6;
+    }
+    repeated DevInfo devs = 7;
+}
+
+message NoParams {
+
+}
+
+message DeleteDevRequest {
+    int32 id_desarrollador = 1;
+}
+
+message RowsAffected {
+    int32 rows_affected = 1;
+}
+
+message DevProjIdRequest {
+    int32 id_desarrollador = 1;
+    int32 id_proyecto = 2;
+}
+
+message ActDevIdRequest {
+    int32 id_actividad = 1;
+    int32 id_desarrollador = 2;
 }
