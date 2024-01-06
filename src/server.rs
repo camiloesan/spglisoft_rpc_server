@@ -1,10 +1,11 @@
 mod dal;
 
-use dal::user;
+use dal::{user, project};
 use data_manager::data_manager_server::{DataManager, DataManagerServer};
 use data_manager::{
-    DeveloperCredentials, DeveloperRequest, DevsByProjectIdList, DevsByProjectIdRequest,
-    ProjectManagerCredentials, ProjectManagerRequest, NoParams, DeleteDevRequest, RowsAffected, DevProjIdRequest, ActDevIdRequest,
+    ActDevIdRequest, DeleteDevRequest, DevProjIdRequest, DeveloperCredentials, DeveloperRequest,
+    DevsByProjectIdList, DevsByProjectIdRequest, NoParams, ProjectManagerCredentials,
+    ProjectManagerRequest, RowsAffected, ManagerIdRequest, ProjectList, DevIdRequest, ProjectInfo,
 };
 use tonic::{transport::Server, Request, Response, Status};
 
@@ -52,7 +53,7 @@ impl DataManager for DataService {
 
     async fn get_devs_without_project(
         &self,
-        _request: Request<NoParams>
+        _request: Request<NoParams>,
     ) -> Result<Response<DevsByProjectIdList>, Status> {
         let response = DevsByProjectIdList {
             devs: user::get_devs_without_project(),
@@ -62,7 +63,7 @@ impl DataManager for DataService {
 
     async fn delete_dev_from_project(
         &self,
-        request: Request<DeleteDevRequest>
+        request: Request<DeleteDevRequest>,
     ) -> Result<Response<RowsAffected>, Status> {
         let request_data = request.into_parts();
         let response = RowsAffected {
@@ -73,23 +74,49 @@ impl DataManager for DataService {
 
     async fn add_dev_to_project(
         &self,
-        request: Request<DevProjIdRequest>
+        request: Request<DevProjIdRequest>,
     ) -> Result<Response<RowsAffected>, Status> {
         let request_data = request.into_parts();
         let response = RowsAffected {
-            rows_affected: user::add_dev_to_project(request_data.2.id_proyecto, request_data.2.id_desarrollador),
+            rows_affected: user::add_dev_to_project(
+                request_data.2.id_proyecto,
+                request_data.2.id_desarrollador,
+            ),
         };
         Ok(Response::new(response))
     }
 
     async fn assign_activity(
         &self,
-        request: Request<ActDevIdRequest>
+        request: Request<ActDevIdRequest>,
     ) -> Result<Response<RowsAffected>, Status> {
         let request_data = request.into_parts();
         let response = RowsAffected {
-            rows_affected: user::assign_activity(request_data.2.id_actividad, request_data.2.id_desarrollador),
+            rows_affected: user::assign_activity(
+                request_data.2.id_actividad,
+                request_data.2.id_desarrollador,
+            ),
         };
+        Ok(Response::new(response))
+    }
+
+    async fn get_projects_by_manager(
+        &self,
+        request: Request<ManagerIdRequest>,
+    ) -> Result<Response<ProjectList>, Status> {
+        let request_data = request.into_parts();
+        let response = ProjectList {
+            proyectos: project::get_projects_by_manager(request_data.2.id_representante),
+        };
+        Ok(Response::new(response))
+    }
+
+    async fn get_project_by_dev(
+        &self,
+        request: Request<DevIdRequest>,
+    ) -> Result<Response<ProjectInfo>, Status> {
+        let request_data = request.into_parts();
+        let response = project::get_project_by_dev(request_data.2.id_desarrollador);
         Ok(Response::new(response))
     }
 }

@@ -120,7 +120,8 @@ pub fn delete_dev_from_project(id_developer: i32) -> i32 {
         WHERE id_desarrollador = :id_developer";
 
     let mut conn = data_access::get_connection();
-    let rows_affected = conn.exec_iter(&query, params! { "id_developer" => id_developer})
+    let rows_affected = conn
+        .exec_iter(&query, params! { "id_developer" => id_developer})
         .unwrap()
         .affected_rows();
 
@@ -133,26 +134,30 @@ pub fn add_dev_to_project(id_project: i32, id_developer: i32) -> i32 {
         WHERE id_desarrollador = :id_developer";
 
     let mut conn = data_access::get_connection();
-    let rows_affected = conn.exec_iter(
-        &query, 
-        params! { "id_project" => id_project, "id_developer" => id_developer})
+    let rows_affected = conn
+        .exec_iter(
+            &query,
+            params! { "id_project" => id_project, "id_developer" => id_developer},
+        )
         .unwrap()
         .affected_rows();
-    
+
     rows_affected as i32
 }
 
-pub fn assign_activity(id_activity: i32 , id_developer: i32) -> i32 {
+pub fn assign_activity(id_activity: i32, id_developer: i32) -> i32 {
     let query = "UPDATE actividad 
         SET id_desarrollador = :id_developer 
         WHERE id_actividad = :id_activity";
 
     let mut conn = data_access::get_connection();
-    let rows_affected = conn.exec_iter(
-        &query, 
-        params! { "id_developer" => id_developer, "id_activity" => id_activity})
+    let rows_affected = conn
+        .exec_iter(
+            &query,
+            params! { "id_developer" => id_developer, "id_activity" => id_activity},
+        )
         .unwrap()
         .affected_rows();
-    
+
     rows_affected as i32
 }

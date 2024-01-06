@@ -9,6 +9,8 @@ service DataManager {
     rpc DeleteDevFromProject (DeleteDevRequest) returns (RowsAffected);
     rpc AddDevToProject (DevProjIdRequest) returns (RowsAffected);
     rpc AssignActivity (ActDevIdRequest) returns (RowsAffected);
+    rpc GetProjectsByManager (ManagerIdRequest) returns (ProjectList);
+    rpc GetProjectByDev (DevIdRequest) returns (ProjectInfo);
 }
 
 message DeveloperRequest {
@@ -72,4 +74,27 @@ message DevProjIdRequest {
 message ActDevIdRequest {
     int32 id_actividad = 1;
     int32 id_desarrollador = 2;
+}
+
+message ManagerIdRequest {
+    int32 id_representante = 1;
+}
+
+message ProjectInfo {
+    int32 id_proyecto = 1;
+    string nombre_proyecto = 2;
+    string descripcion = 3;
+    string fecha_inicio = 4;
+    string fecha_fin = 5;
+    string estado = 6;
+    string nombre_representante = 7;
+    string apellido_paterno = 8;
+    string apellido_materno = 9;
+}
+message ProjectList {
+    repeated ProjectInfo proyectos = 10;
+}
+
+message DevIdRequest {
+    int32 id_desarrollador = 1;
 }
