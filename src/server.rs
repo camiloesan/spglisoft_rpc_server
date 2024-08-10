@@ -1,11 +1,11 @@
 mod dal;
 
-use dal::{user, project};
+use dal::{user, project, change};
 use data_manager::data_manager_server::{DataManager, DataManagerServer};
 use data_manager::{
     ActDevIdRequest, DeleteDevRequest, DevProjIdRequest, DeveloperCredentials, DeveloperRequest,
     DevsByProjectIdList, DevsByProjectIdRequest, NoParams, ProjectManagerCredentials,
-    ProjectManagerRequest, RowsAffected, ManagerIdRequest, ProjectList, DevIdRequest, ProjectInfo,
+    ProjectManagerRequest, RowsAffected, ManagerIdRequest, ProjectList, DevIdRequest, ProjectInfo, ChangeTypeList,
 };
 use tonic::{transport::Server, Request, Response, Status};
 
@@ -119,6 +119,18 @@ impl DataManager for DataService {
         let response = project::get_project_by_dev(request_data.2.id_desarrollador);
         Ok(Response::new(response))
     }
+
+    async fn get_change_types(
+        &self,
+        _request: Request<NoParams>,
+    ) -> Result<Response<ChangeTypeList>, Status> {
+        let response = ChangeTypeList { 
+            tipos_cambio: change::get_change_types() 
+        };
+        Ok(Response::new(response))
+    }
+
+    
 }
 
 #[tokio::main]

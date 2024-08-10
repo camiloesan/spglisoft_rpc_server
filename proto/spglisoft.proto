@@ -11,6 +11,9 @@ service DataManager {
     rpc AssignActivity (ActDevIdRequest) returns (RowsAffected);
     rpc GetProjectsByManager (ManagerIdRequest) returns (ProjectList);
     rpc GetProjectByDev (DevIdRequest) returns (ProjectInfo);
+    rpc GetChangeTypes (NoParams) returns (ChangeTypeList);
+
+    rpc GetChangesByRequestId (RequestIdChangeIdRequest) returns (ChangeList);
 }
 
 message DeveloperRequest {
@@ -97,4 +100,21 @@ message ProjectList {
 
 message DevIdRequest {
     int32 id_desarrollador = 1;
+}
+
+message ChangeTypeInfo {
+    int32 id_tipo_cambio = 1;
+    string tipo_cambio = 2;
+}
+
+message ChangeTypeList {
+    repeated ChangeTypeInfo tipos_cambio = 1;
+}
+
+message RequestIdChangeIdRequest {
+
+}
+
+message ChangeList {
+    
 }
